@@ -1,0 +1,10 @@
+{
+  "name": "Smart Image to PDF Tools",
+  "short_name": "Smart PDF",
+  "description": "Smart Image to PDF Tools by Prashant Sharma",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f6fb",
+  "theme_color": "#0757b8",
+  "icons": [{"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]
+}

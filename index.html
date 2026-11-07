@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="theme-color" content="#0757b8"><link rel="manifest" href="./manifest.webmanifest"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Image to PDF Tools by Prashant Sharma">
+<title>Smart Image to PDF Tools</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#667085;--primary:#5b5ce2;--line:#e5e7ef}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#073b83,#1688e8);color:white;padding:24px 18px 34px;text-align:center}header .brand-icon{width:76px;height:76px;object-fit:cover;border-radius:18px;border:3px solid #fff;box-shadow:0 5px 18px #001b4d55;margin-bottom:10px}header .byline{font-size:13px;margin-top:8px;opacity:.95}
+header h1{margin:0 0 8px;font-size:28px}header p{margin:0;opacity:.9}
+main{max-width:1050px;margin:-18px auto 40px;padding:0 16px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;background:var(--card);padding:12px;border-radius:16px;box-shadow:0 8px 28px #20245a12}
+button,.btn{border:0;border-radius:10px;padding:11px 15px;background:#eeeefb;color:#3536a5;font-weight:650;cursor:pointer}
+button.active,.primary{background:var(--primary);color:#fff}.panel{display:none;background:var(--card);margin-top:16px;padding:22px;border-radius:18px;box-shadow:0 8px 28px #20245a0c}.panel.active{display:block}
+h2{margin:0 0 8px}.sub{color:var(--muted);margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+label{display:block;font-size:13px;font-weight:650;color:#475467;margin:0 0 6px}input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}
+.field{margin-bottom:14px}.drop{border:2px dashed #b9baf4;background:#f8f8ff;padding:24px;border-radius:14px;text-align:center;margin:14px 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.status{margin-top:14px;color:#475467;font-size:14px;white-space:pre-wrap}.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.thumb{width:104px;border:1px solid var(--line);border-radius:10px;padding:6px;background:white;text-align:center;font-size:11px}.thumb img{width:90px;height:80px;object-fit:contain}.thumb button{padding:4px 7px;margin:3px;font-size:11px}
+.note{font-size:12px;color:var(--muted);margin-top:20px;line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:600px){header h1{font-size:23px}.panel{padding:16px}.tabs button{flex:1}}
+</style>
+</head>
+<body>
+<header><img class="brand-icon" src="./icon-512.png" alt="Smart Image to PDF Tools logo"><h1>Smart Image to PDF Tools</h1><p>Simple • Private • Free to use in your browser</p><p class="byline">Developed by Prashant Sharma</p></header>
+<main>
+<div class="tabs">
+<button class="active" data-tab="image">Image to PDF</button><button data-tab="convert">PDF to Image</button><button data-tab="merge">Merge PDF</button><button data-tab="split">Split PDF</button><button data-tab="compress">Compress PDF</button>
+</div>
+<section class="panel active" id="image">
+<h2>Image to PDF</h2><p class="sub">Add photos, arrange them and customize every page.</p>
+<div class="drop"><input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="sub">Choose JPG, PNG or WebP images</p></div>
+<div id="thumbs" class="thumbs"></div>
+<div class="grid">
+<div class="field"><label>Page size</label><select id="pageSize"><option value="a4">A4</option><option value="a3">A3</option><option value="a5">A5</option><option value="letter">Letter</option><option value="legal">Legal</option><option value="original">Original image size</option></select></div>
+<div class="field"><label>Page Orientation</label><select id="orientation"><option value="auto">Auto (match image)</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+<div class="field"><label>Image fit</label><select id="fit"><option value="contain">Fit (show full image)</option><option value="cover">Fill page (crop edges)</option><option value="stretch">Stretch</option></select></div>
+<div class="field"><label>Image position</label><select id="position"><option value="center">Center</option><option value="top">Top</option><option value="bottom">Bottom</option></select></div>
+<div class="field"><label>Crop image</label><select id="cropMode"><option value="none">No crop</option><option value="custom">Custom crop (zoom & position)</option></select></div>
+<div class="field"><label>Crop zoom <span id="zoomLabel">100%</span></label><input id="cropZoom" type="range" min="100" max="200" value="100"></div>
+<div class="field"><label>Crop horizontal position <span id="xLabel">50%</span></label><input id="cropX" type="range" min="0" max="100" value="50"></div>
+<div class="field"><label>Crop vertical position <span id="yLabel">50%</span></label><input id="cropY" type="range" min="0" max="100" value="50"></div>
+<div class="field"><label>Margin (mm)</label><input id="margin" type="number" min="0" max="40" value="10"></div>
+<div class="field"><label>Image quality</label><select id="quality"><option value="1">High</option><option value=".8">Medium</option><option value=".6">Low (smaller file)</option></select></div>
+<div class="field"><label>Page background</label><input id="bgcolor" type="color" value="#ffffff"></div>
+</div>
+<p class="note">Auto orientation selects portrait or landscape separately for each image. Custom crop zooms into each image; use horizontal and vertical sliders to choose which area remains visible. For a full-page crop, choose “Fill page” under Image fit.</p><div class="actions"><button class="primary" id="makePdf">Create & Download PDF</button><button id="clearImages">Clear images</button></div><div class="status" id="imageStatus"></div>
+</section>
+<section class="panel" id="convert"><h2>PDF to Image</h2><p class="sub">Render PDF pages as PNG images and download them together.</p><div class="field"><label>Select PDF</label><input id="toImageFile" type="file" accept="application/pdf"></div><div class="field"><label>Output scale</label><select id="scale"><option value="1">Standard</option><option value="1.5">High</option><option value="2">Very high</option></select></div><button class="primary" id="toImages">Convert PDF to PNGs</button><div class="status" id="convertStatus"></div></section>
+<section class="panel" id="merge"><h2>Merge PDF</h2><p class="sub">Combine multiple PDF files in the order selected.</p><div class="field"><label>Select PDF files</label><input id="mergeFiles" type="file" accept="application/pdf" multiple></div><button class="primary" id="mergeBtn">Merge & Download</button><div class="status" id="mergeStatus"></div></section>
+<section class="panel" id="split"><h2>Split PDF</h2><p class="sub">Extract a page range into a new PDF.</p><div class="field"><label>Select PDF</label><input id="splitFile" type="file" accept="application/pdf"></div><div class="grid"><div class="field"><label>From page</label><input id="fromPage" type="number" min="1" value="1"></div><div class="field"><label>To page</label><input id="toPage" type="number" min="1" value="1"></div></div><button class="primary" id="splitBtn">Extract & Download</button><div class="status" id="splitStatus"></div></section>
+<section class="panel" id="compress"><h2>Compress PDF</h2><p class="sub">Re-save and optimize the PDF structure. This may reduce some files, but scanned/image-heavy PDFs may not shrink much.</p><div class="field"><label>Select PDF</label><input id="compressFile" type="file" accept="application/pdf"></div><button class="primary" id="compressBtn">Optimize & Download</button><div class="status" id="compressStatus"></div></section>
+<p class="note">Privacy: files are processed locally in your browser; they are not uploaded to a server by this app. For best results, use a modern browser and keep this page open while processing. PDF compression is a basic re-save, not guaranteed to reduce every file.</p>
+</main><footer>Smart Image to PDF Tools · Developed by Prashant Sharma<br>Your files stay on your device</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+const $=id=>document.getElementById(id);let selected=[];
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')});
+function download(bytes,name,type='application/pdf'){const blob=new Blob([bytes],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+$('images').onchange=e=>{selected.push(...Array.from(e.target.files));renderThumbs();e.target.value=''};
+function renderThumbs(){$('thumbs').innerHTML='';selected.forEach((f,i)=>{let d=document.createElement('div');d.className='thumb';let im=document.createElement('img');im.src=URL.createObjectURL(f);let t=document.createElement('div');t.textContent=f.name.slice(0,18);let up=document.createElement('button');up.textContent='↑';up.onclick=()=>{if(i){[selected[i-1],selected[i]]=[selected[i],selected[i-1]];renderThumbs()}};let dn=document.createElement('button');dn.textContent='↓';dn.onclick=()=>{if(i<selected.length-1){[selected[i+1],selected[i]]=[selected[i],selected[i+1]];renderThumbs()}};let rm=document.createElement('button');rm.textContent='✕';rm.onclick=()=>{selected.splice(i,1);renderThumbs()};d.append(im,t,up,dn,rm);$('thumbs').append(d)})}
+$('clearImages').onclick=()=>{selected=[];renderThumbs();$('imageStatus').textContent='Cleared.'};
+$('cropZoom').oninput=()=> $('zoomLabel').textContent=$('cropZoom').value+'%';
+$('cropX').oninput=()=> $('xLabel').textContent=$('cropX').value+'%';
+$('cropY').oninput=()=> $('yLabel').textContent=$('cropY').value+'%';
+const sizes={a4:[595.28,841.89],a3:[841.89,1190.55],a5:[419.53,595.28],letter:[612,792],legal:[612,1008]};
+$('makePdf').onclick=async()=>{try{if(!selected.length)throw Error('Please select at least one image.');$('imageStatus').textContent='Creating PDF…';const {PDFDocument,rgb}=PDFLib;let pdf=await PDFDocument.create();for(const f of selected){let bytes=await f.arrayBuffer(),bmp=await createImageBitmap(f),c=document.createElement('canvas');
+let cropOn=$('cropMode').value==='custom',zoom=cropOn?Number($('cropZoom').value)/100:1;
+let sw=bmp.width/zoom,sh=bmp.height/zoom,sx=(bmp.width-sw)*Number($('cropX').value)/100,sy=(bmp.height-sh)*Number($('cropY').value)/100;
+c.width=Math.max(1,Math.round(sw*Number($('quality').value)));c.height=Math.max(1,Math.round(sh*Number($('quality').value)));
+c.getContext('2d').drawImage(bmp,sx,sy,sw,sh,0,0,c.width,c.height);
+let blob=await new Promise(r=>c.toBlob(r,'image/jpeg',Number($('quality').value)));
+let img=await pdf.embedJpg(await blob.arrayBuffer());
+let key=$('pageSize').value,pg;
+if(key==='original'){pg=pdf.addPage([img.width,img.height])}
+else{let [w,h]=sizes[key];if($('orientation').value==='auto'){if(img.width>img.height)[w,h]=[h,w]}else if($('orientation').value==='landscape')[w,h]=[h,w];pg=pdf.addPage([w,h])}
+let W=pg.getWidth(),H=pg.getHeight(),m=Math.max(0,Math.min(40,Number($('margin').value)||0))*72/25.4,aw=W-2*m,ah=H-2*m,iw=img.width,ih=img.height,fit=$('fit').value;let dw,dh;
+if(fit==='stretch'){dw=aw;dh=ah}else{let s=fit==='cover'?Math.max(aw/iw,ah/ih):Math.min(aw/iw,ah/ih);dw=iw*s;dh=ih*s}
+let x=(W-dw)/2,y=$('position').value==='top'?H-m-dh:$('position').value==='bottom'?m:(H-dh)/2;
+pg.drawRectangle({x:0,y:0,width:W,height:H,color:rgb(...$('bgcolor').value.match(/[A-Fa-f0-9]{2}/g).map(v=>parseInt(v,16)/255))});pg.drawImage(img,{x,y,width:dw,height:dh})}
+download(await pdf.save(),'images-to-pdf.pdf');$('imageStatus').textContent='Done! Your PDF has been downloaded.'}catch(e){$('imageStatus').textContent='Error: '+e.message}};
+async function readPdf(file){return PDFLib.PDFDocument.load(await file.arrayBuffer())}
+$('mergeBtn').onclick=async()=>{try{let fs=Array.from($('mergeFiles').files);if(fs.length<2)throw Error('Select at least two PDF files.');let out=await PDFLib.PDFDocument.create();for(let f of fs){let src=await readPdf(f),pages=await out.copyPages(src,src.getPageIndices());pages.forEach(p=>out.addPage(p))}download(await out.save(),'merged.pdf');$('mergeStatus').textContent='Merged successfully.'}catch(e){$('mergeStatus').textContent='Error: '+e.message}};
+$('splitBtn').onclick=async()=>{try{let f=$('splitFile').files[0];if(!f)throw Error('Select a PDF.');let src=await readPdf(f),a=Number($('fromPage').value)-1,b=Number($('toPage').value)-1;if(a<0||b<a||b>=src.getPageCount())throw Error('Enter a valid page range. Total pages: '+src.getPageCount());let out=await PDFLib.PDFDocument.create(),pages=await out.copyPages(src,Array.from({length:b-a+1},(_,i)=>a+i));pages.forEach(p=>out.addPage(p));download(await out.save(),'split-pages.pdf');$('splitStatus').textContent='Extracted '+(a+1)+'–'+(b+1)+' successfully.'}catch(e){$('splitStatus').textContent='Error: '+e.message}};
+$('compressBtn').onclick=async()=>{try{let f=$('compressFile').files[0];if(!f)throw Error('Select a PDF.');let src=await readPdf(f),bytes=await src.save({useObjectStreams:true,addDefaultPage:false});download(bytes,'optimized.pdf');$('compressStatus').textContent='Optimization complete. Original: '+(f.size/1024).toFixed(1)+' KB · New: '+(bytes.length/1024).toFixed(1)+' KB'}catch(e){$('compressStatus').textContent='Error: '+e.message}};
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+$('toImages').onclick=async()=>{try{let f=$('toImageFile').files[0];if(!f)throw Error('Select a PDF.');$('convertStatus').textContent='Rendering pages…';let doc=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,zip=new JSZip(),scale=Number($('scale').value);for(let n=1;n<=doc.numPages;n++){let p=await doc.getPage(n),v=p.getViewport({scale}),c=document.createElement('canvas');c.width=v.width;c.height=v.height;await p.render({canvasContext:c.getContext('2d'),viewport:v}).promise;let blob=await new Promise(r=>c.toBlob(r,'image/png'));zip.file('page-'+n+'.png',blob);$('convertStatus').textContent='Rendered '+n+' of '+doc.numPages+' pages…'}let z=await zip.generateAsync({type:'uint8array'});download(z,'pdf-pages-images.zip','application/zip');$('convertStatus').textContent='Done! PNG pages downloaded in a ZIP file.'}catch(e){$('convertStatus').textContent='Error: '+e.message}};
+</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>\n</body></html>
